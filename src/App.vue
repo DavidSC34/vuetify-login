@@ -1,32 +1,23 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <v-app>
+        <v-toolbar>
+        <v-toolbar-title class="headline text-uppercase"> <span>Vue</span></v-toolbar-title>
+        <v-spacer></v-spacer>
+
+        <v-btn>
+         <span class="mr-2">Cerrar sesion</span>
+          <v-icon>fas fa-address-book</v-icon>
+        </v-btn>
+
+        </v-toolbar>
+
+
+      <v-content>
+        <v-container>
+         <router-view></router-view>
+        </v-container>
+      </v-content>
+    </v-app>
   </div>
 </template>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
