@@ -8,11 +8,11 @@
               </v-card-text>
 
               <v-card-text>
-                  <v-btn block color="error">
+                  <v-btn block color="error" @click="google">
                       <v-icon left dark>fab fa-google</v-icon>
                       Google
                   </v-btn>
-                  <v-btn block color="info">
+                  <v-btn block color="info" @click="facebook">
                       <v-icon left dark> fab fa-facebook-f</v-icon>
                       Facebook
 
@@ -34,10 +34,54 @@
 </template>
 
 <script>
+import {firebase,auth,db} from '@/firebase';
+import {mapMutations} from 'vuex'
+import router from '../router/'
 export default {
   data() {
       return {
           registro: false
+      }
+  },
+  methods: {
+      ...mapMutations(['nuevoUsuario']),
+      facebook(){
+        console.log('facebook');
+        const provider = new firebase.auth.FacebookAuthProvider();
+        this.ingresar(provider);
+      },
+      google() {
+          console.log('Google');
+          const provider = new firebase.auth.GoogleAuthProvider();
+
+           this.ingresar(provider);
+          
+      },
+      async ingresar(provider){
+                  firebase.auth.languageCode='es';
+
+          try {
+              
+              const result = await firebase.auth().signInWithPopup(provider);
+              const user = result.user;
+              console.log(user);
+
+              //Construir usuario
+              const usuario = {
+                  nombre:user.displayName,
+                  email:user.email,
+                  uid:user.uid,
+                  foto:user.photoURL
+              }
+              this.nuevoUsuario(usuario);
+              //Guardar en firestore
+              await db.collection('usuarios').doc(usuario.uid).set(usuario)
+              console.log('usuario guardado en DB');
+              router.push('/')
+          } catch (error) {
+              console.log(error);
+          }
+
       }
   },
 }
