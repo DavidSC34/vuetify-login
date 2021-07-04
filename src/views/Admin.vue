@@ -15,6 +15,10 @@
                         <v-btn color="primary" @click="$refs.boton.click()">Buscar imagen</v-btn>
                         <v-btn color="secondary" :disabled="file === null">Subir imagen</v-btn>
                     </v-card-text>
+                    <v-card-text v-if="file">
+                        <h4>{{file.name}}</h4>
+                        <v-img :src="urlTemporal"></v-img>
+                    </v-card-text>
             </v-card>
        </v-flex>
    </v-layout>
@@ -25,7 +29,8 @@ import {mapState} from 'vuex'
 export default {
     data() {
         return {
-            file: null
+            file: null,
+            urlTemporal:''
         }
     },
     computed:{
@@ -35,6 +40,13 @@ export default {
         buscarImagen(event) {
             console.log(event.target.files[0]);
             this.file = event.target.files[0];
+
+            const reader = new FileReader();
+            reader.readAsDataURL(this.file);
+            reader.onload = (e)=>{
+                //console.log(e.target.result);
+                this.urlTemporal = e.target.result;
+            }
         }
     },
 }
