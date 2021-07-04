@@ -19,8 +19,19 @@
         </v-toolbar>
 
         <v-navigation-drawer class="indigo" v-model="drawer" app>
-                <v-list v-for="(item,index) in items" :key="index">
-                    <v-list-tile>
+                <v-layout column align-center mt-5>
+                    <v-flex>
+                        <v-avatar>
+                          <img :src="usuario.foto" alt="avatar">
+                        </v-avatar>
+                    </v-flex>
+                    <v-flex>
+                        <p mt-3 class="white--text">{{usuario.nombre}}</p>   
+                    </v-flex>
+                </v-layout> 
+            <v-divider></v-divider>
+                <v-list >
+                    <v-list-tile v-for="(item,index) in items" :key="index" :to="item.to">
                         <v-list-tile-action>
                             <v-icon class="white--text">{{item.icon}}</v-icon>
                         </v-list-tile-action>
@@ -35,20 +46,23 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex'
+import {mapActions,mapState} from 'vuex'
 export default {
     data() {
         return {
             drawer: true,
             items: [
-          { title: 'Dashboard', icon: 'fas fa-address-card' },
-          { title: 'Account', icon: 'fas fa-address-card' },
-          { title: 'Admin', icon: 'fas fa-address-card' }
+          { title: 'Dashboard', icon: 'fas fa-address-card',to:{path:'/'} },
+          { title: 'Account', icon: 'fas fa-address-card',to:{path:'/ingreso'} },
+          { title: 'Admin', icon: 'fas fa-address-card',to:{path:'/admin'} }
         ]
         }
     },
         methods: {
     ...mapActions(['cerrarSesion'])
+  },
+  computed: {
+     ...mapState(['usuario'])
   },
 
 }
