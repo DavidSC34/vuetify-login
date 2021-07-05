@@ -20,6 +20,11 @@
                             :loading="loading"
                             >Subir imagen</v-btn>
                     </v-card-text>
+                    
+                     <v-card-text v-if="error">
+                        <h4>{{error}}</h4>                      
+                    </v-card-text>
+
                     <v-card-text v-if="file">
                         <h4>{{file.name}}</h4>
                         <v-img :src="urlTemporal"></v-img>
@@ -37,7 +42,8 @@ export default {
         return {
             file: null,
             urlTemporal:'',
-            loading:false
+            loading:false,
+            error:null
         }
     },
     computed:{
@@ -46,7 +52,18 @@ export default {
     methods: {
         buscarImagen(event) {
             console.log(event.target.files[0]);
-            this.file = event.target.files[0];
+            const tipoArchivo = event.target.files[0].type;
+            
+            if(tipoArchivo ==='image/jpeg' || tipoArchivo ==='image/png'){
+                this.file = event.target.files[0];
+                this.error= null;
+
+            }else{
+                this.error="Archivo no valido (solo tipo jpeg o png)";
+                this.file = null;
+                return;
+            }
+
 
             const reader = new FileReader();
             reader.readAsDataURL(this.file);
@@ -68,6 +85,8 @@ export default {
                 await db.collection('usuarios').doc(this.usuario.uid).update({
                     foto:urlDescarga
                 })
+                this.error="Imagen subida con exito";
+                this.file = null;//-->borrar la imagen para quitarla del preload
             } catch (error) {
                 console.log(error);
             }finally{
