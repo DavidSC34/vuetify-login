@@ -2,7 +2,7 @@
  
     <v-app>
 
-        <NavBar />
+        <NavBar v-if="usuario !=''"/>
 
       <v-content>
         <v-container>
@@ -15,6 +15,7 @@
 <script>
 
 import NavBar from './components/NavBar.vue'
+import {mapState} from 'vuex'
 export default {
   components:{
     NavBar
@@ -23,6 +24,9 @@ export default {
     return{
 
     }
+  },
+  computed: {
+    ...mapState(['usuario'])
   },
   
 
